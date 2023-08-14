@@ -1,0 +1,11 @@
+import plotly.express as px
+
+fig = px.bar(df_melted, 
+             x='value', 
+             y='name', 
+             color='name',
+             orientation='h', 
+             base=df_melted['z'],
+             title="Bar chart with custom base")
+
+fig.show()
