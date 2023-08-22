@@ -7,6 +7,28 @@ from typing import Union, Dict, Tuple
 
 from plotly.subplots import make_subplots
 
+def extract_subplots_info_v5(fig):
+    subplots_info = []
+    
+    # Identify unique facet rows and columns from the traces' xaxis and yaxis attributes
+    facet_rows = sorted({trace.yaxis for trace in fig.data})
+    facet_cols = sorted({trace.xaxis for trace in fig.data})
+
+    for i, row in enumerate(facet_rows):
+        for j, col in enumerate(facet_cols):
+            # Count the number of traces that belong to the current combination of facet row and column
+            num_traces = sum(1 for trace in fig.data if trace.yaxis == row and trace.xaxis == col)
+            
+            # Only append subplots with traces
+            if num_traces > 0:
+                subplots_info.append({
+                    'facet_row': i,
+                    'facet_col': j,
+                    'num_traces': num_traces
+                })
+    
+    return subplots_info
+
 
 def format_currency(value: Union[int, float]) -> str:
     if abs(value) < 1_000:
